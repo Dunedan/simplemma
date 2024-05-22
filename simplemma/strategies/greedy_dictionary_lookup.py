@@ -65,7 +65,7 @@ class GreedyDictionaryLookupStrategy(LemmatizationStrategy):
             if candidate not in dictionary:
                 break
 
-            new_candidate = dictionary[candidate]
+            new_candidate = dictionary[candidate][0].decode()
 
             if (
                 len(new_candidate) > len(candidate)

@@ -3,9 +3,10 @@ import logging
 import pickle
 import re
 
-from operator import itemgetter
 from pathlib import Path
 from typing import Dict, List, Optional
+
+from marisa_trie import BytesTrie
 
 import simplemma
 from simplemma.strategies.dictionaries.dictionary_factory import SUPPORTED_LANGUAGES
@@ -129,14 +130,12 @@ def _pickle_dict(
     langcode: str, listpath: str = "lists", filepath: Optional[str] = None
 ) -> None:
     mydict = _load_dict(langcode, listpath)
-    # sort dictionary to help saving space during compression
-    if langcode not in ("lt", "sw"):
-        mydict = dict(sorted(mydict.items(), key=itemgetter(1)))
     if filepath is None:
         filename = f"strategies/dictionaries/data/{langcode}.plzma"
         filepath = str(Path(simplemma.__file__).parent / filename)
+    dict_trie = BytesTrie(zip(mydict.keys(), mydict.values()))
     with lzma.open(filepath, "wb") as filehandle:  # , filters=my_filters, preset=9
-        pickle.dump(mydict, filehandle, protocol=4)
+        pickle.dump(dict_trie, filehandle, protocol=4)
     LOGGER.debug("%s %s", langcode, len(mydict))
 
 

@@ -44,7 +44,9 @@ class DictionaryLookupStrategy(LemmatizationStrategy):
         # Search the language data, reverse case to extend coverage.
         dictionary = self._dictionary_factory.get_dictionary(lang)
         if token in dictionary:
-            return dictionary[token]
+            return dictionary[token][0].decode()
         # Try upper or lowercase.
         token = token.lower() if token[0].isupper() else token.capitalize()
-        return dictionary.get(token)
+        if token in dictionary:
+            return dictionary[token][0].decode()
+        return None

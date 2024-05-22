@@ -18,7 +18,9 @@ readme = Path("README.md").read_text()
 # with open('HISTORY.rst') as history_file:
 #    history = history_file.read()
 
-requirements = []
+requirements = [
+    "marisa-trie"
+]
 
 setup_requirements = []
 

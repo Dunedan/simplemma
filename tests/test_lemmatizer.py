@@ -1,7 +1,8 @@
 """Tests for `simplemma` package."""
 
 import pytest
-from typing import Dict
+
+from marisa_trie import BytesTrie
 
 from simplemma import lemmatize, is_known, text_lemmatizer, lemma_iterator, Lemmatizer
 from simplemma.strategies import (
@@ -16,8 +17,8 @@ def test_custom_dictionary_factory() -> None:
         def get_dictionary(
             self,
             lang: str,
-        ) -> Dict[str, str]:
-            return {"testing": "the test works!!"}
+        ) -> BytesTrie:
+            return BytesTrie(zip(["testing"], [b"the test works!!"]))
 
     assert (
         Lemmatizer(
